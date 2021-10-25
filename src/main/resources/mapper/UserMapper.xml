@@ -14,30 +14,44 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, password, salt, email, type, status, activation_code, header_url, create_time
+    id
+    , username, password, salt, email, type, status, activation_code, header_url, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select
+    <include refid="Base_Column_List"/>
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" resultType="com.lee.ylcommunity.entity.User">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByEmail" resultType="com.lee.ylcommunity.entity.User">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from user
+    delete
+    from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lee.ylcommunity.entity.User">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user (username, password, salt, 
-      email, type, status, 
-      activation_code, header_url, create_time
-      )
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{activationCode,jdbcType=VARCHAR}, #{headerUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into user (username, password, salt,
+    email, type, status,
+    activation_code, header_url, create_time
+    )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR},
+    #{email,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+    #{activationCode,jdbcType=VARCHAR}, #{headerUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.lee.ylcommunity.entity.User">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
