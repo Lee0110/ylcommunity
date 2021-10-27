@@ -47,4 +47,9 @@ public class HomeController {
 
         return "/index";
     }
+
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public String getIndexPage2(Model model, Page page) {
+        return getIndexPage(model, page);
+    }
 }

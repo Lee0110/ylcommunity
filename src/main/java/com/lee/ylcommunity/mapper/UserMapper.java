@@ -20,4 +20,8 @@ public interface UserMapper {
     User selectByName(String username);
 
     User selectByEmail(String email);
+
+    int updateHeaderUrlById(int userId, String headerUrl);
+
+    int updatePasswordById(int userId, String password);
 }
