@@ -1,5 +1,6 @@
 package com.lee.ylcommunity.controller;
 
+import com.lee.ylcommunity.annotation.LoginRequired;
 import com.lee.ylcommunity.entity.User;
 import com.lee.ylcommunity.service.UserService;
 import com.lee.ylcommunity.util.CommunityUtil;
@@ -43,11 +44,13 @@ public class UserController {
     @Autowired
     private HostHolder hostHolder;
 
+    @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
     }
 
+    @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImg, Model model) {
         if (null == headerImg) {
