@@ -11,33 +11,56 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.lee.ylcommunity.entity.Comment">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content"/>
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, entity_type, entity_id, target_id, status, create_time
+    id
+    , user_id, entity_type, entity_id, target_id, status, create_time
   </sql>
   <sql id="Blob_Column_List">
     content
   </sql>
+  <sql id="selectFields">
+    id
+    , user_id, entity_type, entity_id, target_id, content, status, create_time
+  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
+    select
+    <include refid="Base_Column_List"/>
     ,
-    <include refid="Blob_Column_List" />
+    <include refid="Blob_Column_List"/>
     from comment
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectCommentByEntity" resultType="com.lee.ylcommunity.entity.Comment">
+    select
+    <include refid="selectFields"></include>
+    from comment
+    where status = 0
+    and entity_type = #{entityType}
+    and entity_id = #{entityId}
+    order by create_time asc
+    limit #{offset}, #{limit}
+  </select>
+  <select id="selectCountByEntity" resultType="java.lang.Integer">
+    select count(id)
+    from comment
+    where status = 0
+      and entity_type = #{entityType}
+      and entity_id = #{entityId}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from comment
+    delete
+    from comment
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lee.ylcommunity.entity.Comment">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into comment (user_id, entity_type, entity_id, 
-      target_id, status, create_time, 
-      content)
+    insert into comment (user_id, entity_type, entity_id,
+    target_id, status, create_time,
+    content)
     values (#{userId,jdbcType=INTEGER}, #{entityType,jdbcType=INTEGER}, #{entityId,jdbcType=INTEGER}, 
       #{targetId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{content,jdbcType=LONGVARCHAR})
